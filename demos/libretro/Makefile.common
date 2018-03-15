@@ -1,5 +1,5 @@
 SOURCES_C   := 
-SOURCES_CXX := $(CORE_DIR)/soloud_test.c \
+SOURCES_CXX := $(CORE_DIR)/soloud_test.cpp \
 	$(CORE_DIR)/../../src/backend/libretro/soloud_libretro.cpp \
 	$(wildcard \
 		$(CORE_DIR)/../../src/core/*.cpp \
