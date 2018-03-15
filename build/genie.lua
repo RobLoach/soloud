@@ -3,6 +3,7 @@ local WITH_SDL_STATIC = 0
 local WITH_SDL2_STATIC = 0
 local WITH_PORTAUDIO = 0
 local WITH_OPENAL = 0
+local WITH_LIBRETRO = 0
 local WITH_XAUDIO2 = 0
 local WITH_WINMM = 0
 local WITH_WASAPI = 0
@@ -63,6 +64,11 @@ newoption {
 newoption {
 	trigger		  = "with-openal",
 	description = "Include OpenAL backend in build"
+}
+
+newoption {
+	trigger		  = "with-libretro",
+	description = "Include libretro backend in build"
 }
 
 newoption {
@@ -182,6 +188,10 @@ if _OPTIONS["with-openal"] then
 	WITH_OPENAL = 1
 end
 
+if _OPTIONS["with-libretro"] then
+	WITH_LIBRETRO = 1
+end
+
 if _OPTIONS["with-portaudio"] then
 	WITH_PORTAUDIO = 1
 end
@@ -212,6 +222,7 @@ if _OPTIONS["with-sdl-only"] then
 	WITH_WINMM = 0
 	WITH_WASAPI = 0
 	WITH_OSS = 0
+	WITH_LIBRETRO = 0
 end
 
 if _OPTIONS["with-sdl2-only"] then
@@ -224,6 +235,7 @@ if _OPTIONS["with-sdl2-only"] then
 	WITH_WINMM = 0
 	WITH_WASAPI = 0
 	WITH_OSS = 0
+	WITH_LIBRETRO = 0
 end
 
 if _OPTIONS["with-sdlstatic-only"] then
@@ -235,6 +247,7 @@ if _OPTIONS["with-sdlstatic-only"] then
 	WITH_WINMM = 0
 	WITH_WASAPI = 0
 	WITH_OSS = 0
+	WITH_LIBRETRO = 0
 end
 
 if _OPTIONS["with-sdl2static-only"] then
@@ -247,6 +260,7 @@ if _OPTIONS["with-sdl2static-only"] then
 	WITH_WINMM = 0
 	WITH_WASAPI = 0
 	WITH_OSS = 0
+	WITH_LIBRETRO = 0
 end
 
 if _OPTIONS["with-sdl2static-only"] then
@@ -259,6 +273,7 @@ if _OPTIONS["with-sdl2static-only"] then
 	WITH_WINMM = 0
 	WITH_WASAPI = 0
 	WITH_OSS = 0
+	WITH_LIBRETRO = 0
 end
 
 if _OPTIONS["with-vita-homebrew-only"] then
@@ -271,6 +286,7 @@ if _OPTIONS["with-vita-homebrew-only"] then
 	WITH_WINMM = 0
 	WITH_WASAPI = 0
 	WITH_OSS = 0
+	WITH_LIBRETRO = 0
 	WITH_ALSA = 0
 	WITH_VITA_HOMEBREW = 1
 
@@ -289,6 +305,7 @@ if _OPTIONS["with-native-only"] then
 	WITH_WINMM = 0
 	WITH_WASAPI = 0
 	WITH_OSS = 0
+	WITH_LIBRETRO = 0
 	if (os.is("Windows")) then
 		WITH_WINMM = 1
 	elseif (os.is("macosx")) then
@@ -316,6 +333,7 @@ print ("WITH_WINMM      = ", WITH_WINMM)
 print ("WITH_WASAPI     = ", WITH_WASAPI)
 print ("WITH_ALSA       = ", WITH_ALSA)
 print ("WITH_OSS        = ", WITH_OSS)
+print ("WITH_LIBRETRO   = ", WITH_LIBRETRO)
 print ("WITH_COREAUDIO  = ", WITH_COREAUDIO)
 print ("WITH_VITA_HOMEBREW = ", WITH_VITA_HOMEBREW)
 print ("WITH_PORTMIDI   = ", WITH_PORTMIDI)
@@ -525,6 +543,16 @@ if (WITH_ALSA == 1) then
 	defines {"WITH_ALSA"}
 	files {
 	  "../src/backend/alsa/**.c*"
+	  }
+	includedirs {
+	  "../include"
+	}
+end
+
+if (WITH_LIBRETRO == 1) then
+	defines {"WITH_LIBRETRO"}
+	files {
+	  "../src/backend/libretro/**.c*"
 	  }
 	includedirs {
 	  "../include"

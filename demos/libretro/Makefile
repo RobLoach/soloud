@@ -130,7 +130,7 @@ else
 endif
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) $(fpic) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(fpic) -c -o $@ $< 
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)

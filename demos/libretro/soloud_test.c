@@ -8,12 +8,14 @@
 #include "libretro.h"
 #include "soloud.h"
 #include "soloud_speech.h"
+#include "soloud_thread.h"
 
 static bool use_audio_cb;
 static uint32_t *frame_buf;
 static struct retro_log_callback logging;
 static retro_log_printf_t log_cb;
 int16_t audio_buffer[2 * (44100 / 60)];
+SoLoud::Soloud soloud;
 SoLoud::Speech speech;
 
 static void fallback_log(enum retro_log_level level, const char *fmt, ...)
@@ -192,13 +194,13 @@ static void emit_audio(void) {
    audio_batch_cb(audio_buffer, (44100 / 60));
 }
 
-void retro_libretro_soload_init() {
+void retro_libretro_soloud_init() {
    // Make the audio callback.
    struct retro_audio_callback audio_cb = { emit_audio, audio_set_state };
    use_audio_cb = environ_cb(RETRO_ENVIRONMENT_SET_AUDIO_CALLBACK, &audio_cb);
 }
 
-void retro_libretro_soload_unload() {
+void retro_libretro_soloud_unload() {
    // Deinitialize soloud.
    soloud.deinit();
 }
@@ -224,7 +226,7 @@ bool retro_load_game(const struct retro_game_info *info)
 
 void retro_unload_game(void)
 {
-      retro_libretro_soload_unload();
+      retro_libretro_soloud_unload();
 }
 
 unsigned retro_get_region(void)
