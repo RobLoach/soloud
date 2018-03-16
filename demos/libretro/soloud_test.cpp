@@ -51,10 +51,10 @@ void retro_set_controller_port_device(unsigned port, unsigned device)
 void retro_get_system_info(struct retro_system_info *info)
 {
    memset(info, 0, sizeof(*info));
-   info->library_name     = "TestCore";
-   info->library_version  = "v1";
+   info->library_name     = "SoLoud Test";
+   info->library_version  = "0.0.1";
    info->need_fullpath    = false;
-   info->valid_extensions = NULL; // Anything is fine, we don't care.
+   info->valid_extensions = NULL;
 }
 
 static retro_video_refresh_t video_cb;
@@ -123,8 +123,6 @@ void retro_set_video_refresh(retro_video_refresh_t cb)
 
 static unsigned x_coord;
 static unsigned y_coord;
-static int mouse_rel_x;
-static int mouse_rel_y;
 
 void retro_reset(void)
 {
@@ -134,11 +132,6 @@ void retro_reset(void)
 
 static void update_input(void)
 {
-   input_poll_cb();
-   if (input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP))
-   {
-      /* stub */
-   }
 }
 
 static void render_checkered(void)
@@ -159,16 +152,7 @@ static void render_checkered(void)
       }
    }
 
-   for (unsigned y = mouse_rel_y - 5; y <= mouse_rel_y + 5; y++)
-      for (unsigned x = mouse_rel_x - 5; x <= mouse_rel_x + 5; x++)
-         buf[y * stride + x] = 0xff;
-
    video_cb(buf, 320, 240, stride << 2);
-}
-
-static void audio_callback(void)
-{
-   audio_cb(0, 0);
 }
 
 void retro_run(void)
@@ -187,8 +171,9 @@ static void audio_set_state(bool enable) {
 }
 
 static void emit_audio(void) {
-   // Mix the audio.
-   soloud.mixSigned16((short*)(&audio_buffer), 2);
+   // Mix the audio with SoLoud.
+   // TODO: Fix the buffer.
+   //soloud.mixSigned16((short*)(&audio_buffer), 2);
 
    // Send the mixed audio to libretro.
    audio_batch_cb(audio_buffer, (44100 / 60));
