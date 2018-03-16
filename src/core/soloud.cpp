@@ -43,7 +43,8 @@ freely, subject to the following restrictions:
    !defined(WITH_OPENAL) && !defined(WITH_XAUDIO2) && !defined(WITH_WINMM) && \
    !defined(WITH_WASAPI) && !defined(WITH_OSS) && !defined(WITH_SDL_STATIC) && \
    !defined(WITH_SDL2_STATIC) && !defined(WITH_ALSA) && !defined(WITH_OPENSLES) && \
-   !defined(WITH_NULL) && !defined(WITH_COREAUDIO) && !defined(WITH_VITA_HOMEBREW)
+   !defined(WITH_LIBRETRO) && !defined(WITH_NULL) && !defined(WITH_COREAUDIO) && \
+   !defined(WITH_VITA_HOMEBREW)
 #error It appears you haven't enabled any of the back-ends. Please #define one or more of the WITH_ defines (or use premake) '
 #endif
 
@@ -339,6 +340,25 @@ namespace SoLoud
 			{
 				inited = 1;
 				mBackendID = Soloud::ALSA;
+			}
+
+			if (ret != 0 && aBackend != Soloud::AUTO)
+				return ret;			
+		}
+#endif
+
+#if defined(WITH_LIBRETRO)
+		if (!inited &&
+			(aBackend == Soloud::LIBRETRO ||
+			aBackend == Soloud::AUTO))
+		{
+			if (aBufferSize == Soloud::AUTO) buffersize = 2048;
+
+			int ret = libretro_init(this, aFlags, samplerate, buffersize, aChannels);
+			if (ret == 0)
+			{
+				inited = 1;
+				mBackendID = Soloud::LIBRETRO;
 			}
 
 			if (ret != 0 && aBackend != Soloud::AUTO)

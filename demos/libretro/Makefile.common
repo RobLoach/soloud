@@ -1,0 +1,14 @@
+SOURCES_C   := 
+SOURCES_CXX := $(CORE_DIR)/soloud_test.cpp \
+	$(CORE_DIR)/../../src/backend/libretro/soloud_libretro.cpp \
+	$(wildcard \
+		$(CORE_DIR)/../../src/core/*.cpp \
+		$(CORE_DIR)/../../src/audiosource/speech/*.cpp \
+	)
+
+# SoLoud WITH_LIBRETRO define.
+CXXFLAGS += -DWITH_LIBRETRO -lpthread
+INCLUDES += -I../../include \
+	-I. \
+	-I../../src/audiosource/speech
+LIBM += -lpthread

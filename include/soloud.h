@@ -161,6 +161,7 @@ namespace SoLoud
 			XAUDIO2,
 			WASAPI,
 			ALSA,
+			LIBRETRO,
 			OSS,
 			OPENAL,
 			COREAUDIO,
